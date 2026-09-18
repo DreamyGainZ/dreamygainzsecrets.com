@@ -8,6 +8,7 @@
 <meta name="theme-color" content="#050505">
 <title>DREAMYGAINZ // CORE MATRIX</title>
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
 <style>
 :root {
   --bg: #050505;
@@ -19,161 +20,393 @@
   --glow: rgba(255, 176, 32, 0.15);
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
-
-body {
-  background: var(--bg); color: var(--text);
-  font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 13px; padding: 16px; padding-bottom: env(safe-area-inset-bottom);
-  overflow: hidden; height: 100dvh; display: flex; flex-direction: column; position: relative;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
-/* --- Background Effects --- */
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'JetBrains Mono', 'Fira Code', ui-monospace,
+    SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 13px;
+  padding: 16px;
+  padding-bottom: env(safe-area-inset-bottom);
+  overflow: hidden;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
 .bg-grid {
-  position: fixed; inset: 0; z-index: -2;
-  background-image: 
-    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
   background-size: 40px 40px;
   mask-image: radial-gradient(circle at center, black 30%, transparent 100%);
   -webkit-mask-image: radial-gradient(circle at center, black 30%, transparent 100%);
 }
 
 .crt-overlay {
-  position: fixed; inset: 0; z-index: 9999; pointer-events: none;
-  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%), 
-              linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  background:
+    linear-gradient(rgba(18,16,16,0) 50%, rgba(0,0,0,0.15) 50%),
+    linear-gradient(90deg, rgba(255,0,0,0.03), rgba(0,255,0,0.01), rgba(0,0,255,0.03));
   background-size: 100% 3px, 3px 100%;
   animation: crtFlicker 0.15s infinite;
 }
 
 @keyframes crtFlicker {
   0% { opacity: 0.97; }
-  50% { opacity: 1.0; }
+  50% { opacity: 1; }
   100% { opacity: 0.98; }
 }
 
-/* --- Main Wrapper --- */
 .command-center {
-  max-width: 100%; width: 100%; margin: 0 auto; background: var(--panel);
-  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--border); border-radius: 16px; 
-  box-shadow: 0 25px 60px rgba(0,0,0,0.9), inset 0 0 0 1px rgba(255,255,255,0.05);
-  display: flex; flex-direction: column; flex: 1; overflow: hidden; position: relative;
+  max-width: 100%;
+  width: 100%;
+  margin: 0 auto;
+  background: var(--panel);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow:
+    0 25px 60px rgba(0,0,0,0.9),
+    inset 0 0 0 1px rgba(255,255,255,0.05);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  position: relative;
 }
 
-/* --- Header --- */
-.hud-header { 
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 16px; border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.4);
+.hud-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(0,0,0,0.4);
 }
-.hud-title { 
-  font-weight: 800; letter-spacing: 0.15em; color: #fff; font-size: 12px; 
-  display: flex; align-items: center; gap: 8px; 
-}
-.hud-title span { color: var(--accent); transition: color 0.3s ease, text-shadow 0.3s ease; text-shadow: 0 0 8px var(--glow); }
-.pulse-dot { 
-  width: 8px; height: 8px; background: var(--accent); border-radius: 50%; 
-  box-shadow: 0 0 10px var(--accent); animation: blink 2s infinite; transition: all 0.3s ease;
-}
-@keyframes blink { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
 
-/* --- Agent Dock --- */
+.hud-title {
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  color: #fff;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hud-title span {
+  color: var(--accent);
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+  text-shadow: 0 0 8px var(--glow);
+}
+
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--accent);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--accent);
+  animation: blink 2s infinite;
+  transition: all 0.3s ease;
+}
+
+@keyframes blink {
+  0%,100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
 .agent-dock {
-  display: flex; gap: 8px; padding: 12px 16px; overflow-x: auto; 
-  border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.3);
-  scrollbar-width: none; scroll-snap-type: x mandatory;
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--border);
+  background: rgba(0,0,0,0.3);
+  scrollbar-width: none;
+  scroll-snap-type: x mandatory;
 }
-.agent-dock::-webkit-scrollbar { display: none; }
+
+.agent-dock::-webkit-scrollbar {
+  display: none;
+}
 
 .agent-tab {
-  flex: 0 0 auto; padding: 8px 14px; border-radius: 8px; background: rgba(255,255,255,0.03);
-  border: 1px solid var(--border); color: var(--dim); font-weight: 700; cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); font-size: 11px; 
-  text-transform: uppercase; letter-spacing: 0.08em; scroll-snap-align: start;
+  flex: 0 0 auto;
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  color: var(--dim);
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  scroll-snap-align: start;
 }
-.agent-tab:hover { background: rgba(255,255,255,0.06); color: #fff; }
+
+.agent-tab:hover {
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+}
+
 .agent-tab.active {
-  color: #fff; background: rgba(255,255,255,0.05); border-color: var(--accent);
-  box-shadow: 0 0 15px var(--glow), inset 0 0 10px var(--glow);
+  color: #fff;
+  background: rgba(255,255,255,0.05);
+  border-color: var(--accent);
+  box-shadow:
+    0 0 15px var(--glow),
+    inset 0 0 10px var(--glow);
   text-shadow: 0 0 8px var(--accent);
 }
 
-/* --- Terminal Stream --- */
 .terminal-stream {
-  flex: 1; overflow-y: auto; background: rgba(0,0,0,0.5); padding: 16px;
-  display: flex; flex-direction: column; gap: 16px; border-bottom: 1px solid var(--border);
+  flex: 1;
+  overflow-y: auto;
+  background: rgba(0,0,0,0.5);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border-bottom: 1px solid var(--border);
   scroll-behavior: smooth;
 }
-.terminal-stream::-webkit-scrollbar { width: 4px; }
-.terminal-stream::-webkit-scrollbar-track { background: transparent; }
-.terminal-stream::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
 
-.msg-row { line-height: 1.6; word-break: break-word; animation: slideIn 0.3s ease-out; }
-@keyframes slideIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+.msg-row {
+  line-height: 1.6;
+  word-break: break-word;
+  animation: slideIn 0.3s ease-out;
+}
 
-.msg-header { font-size: 10px; font-weight: 800; margin-bottom: 6px; letter-spacing: 0.1em; text-transform: uppercase; display: flex; align-items: center; gap: 6px; }
-.msg-header::before { content: '▶'; font-size: 8px; color: var(--accent); }
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-.sys-log { color: var(--dim); font-size: 11px; letter-spacing: 0.05em; }
-.user-log { border-left: 2px solid var(--accent); padding: 10px 14px; background: rgba(255,255,255,0.02); border-radius: 0 8px 8px 0; color: #fff; }
-.agent-log { border-left: 2px solid var(--accent); padding: 14px; background: rgba(255,255,255,0.03); border-radius: 0 8px 8px 0; }
+.msg-header {
+  font-size: 10px;
+  font-weight: 800;
+  margin-bottom: 6px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
 
-/* Markdown Styling */
-.agent-log p { margin-bottom: 8px; }
-.agent-log p:last-child { margin-bottom: 0; }
-.agent-log ul, .agent-log ol { margin-left: 18px; margin-bottom: 8px; }
-.agent-log code { background: rgba(0,0,0,0.6); padding: 2px 6px; border-radius: 4px; font-size: 12px; color: var(--accent); }
-.agent-log pre { background: rgba(0,0,0,0.6); padding: 12px; border-radius: 8px; overflow-x: auto; margin: 10px 0; border: 1px solid var(--border); }
-.agent-log pre code { background: none; padding: 0; color: #e2e8f0; }
-.agent-log h1, .agent-log h2, .agent-log h3 { color: var(--accent); margin-top: 12px; margin-bottom: 6px; font-size: 14px; }
+.msg-header::before {
+  content: '▶';
+  font-size: 8px;
+  color: var(--accent);
+}
 
-/* Decrypting Loader */
+.sys-log {
+  color: var(--dim);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+}
+
+.user-log {
+  border-left: 2px solid var(--accent);
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.02);
+  border-radius: 0 8px 8px 0;
+  color: #fff;
+}
+
+.agent-log {
+  border-left: 2px solid var(--accent);
+  padding: 14px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 0 8px 8px 0;
+}
+
+.agent-log p {
+  margin-bottom: 8px;
+}
+
+.agent-log p:last-child {
+  margin-bottom: 0;
+}
+
+.agent-log ul,
+.agent-log ol {
+  margin-left: 18px;
+  margin-bottom: 8px;
+}
+
+.agent-log code {
+  background: rgba(0,0,0,0.6);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: var(--accent);
+}
+
+.agent-log pre {
+  background: rgba(0,0,0,0.6);
+  padding: 12px;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 10px 0;
+  border: 1px solid var(--border);
+}
+
+.agent-log pre code {
+  background: none;
+  padding: 0;
+  color: #e2e8f0;
+}
+
+.agent-log h1,
+.agent-log h2,
+.agent-log h3 {
+  color: var(--accent);
+  margin-top: 12px;
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
 .decrypt-loader {
-  display: flex; align-items: center; gap: 10px;
-  color: var(--accent); font-size: 11px; letter-spacing: 0.15em; font-weight: 700;
-  padding: 12px; background: rgba(0,0,0,0.4); border-radius: 6px;
-  border-left: 2px solid var(--accent); animation: pulseBorder 1.5s infinite;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--accent);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  font-weight: 700;
+  padding: 12px;
+  background: rgba(0,0,0,0.4);
+  border-radius: 6px;
+  border-left: 2px solid var(--accent);
+  animation: pulseBorder 1.5s infinite;
 }
-.decrypt-loader::before {
-  content: ''; width: 12px; height: 12px;
-  border: 2px solid var(--accent); border-top-color: transparent;
-  border-radius: 50%; animation: spin 0.8s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-@keyframes pulseBorder { 0%, 100% { border-left-color: var(--accent); opacity: 1; } 50% { border-left-color: transparent; opacity: 0.6; } }
 
-/* --- Control Bar --- */
-.control-bar { padding: 16px; display: flex; gap: 10px; background: rgba(0,0,0,0.4); }
+.decrypt-loader::before {
+  content: '';
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--accent);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulseBorder {
+  0%,100% {
+    border-left-color: var(--accent);
+    opacity: 1;
+  }
+  50% {
+    border-left-color: transparent;
+    opacity: 0.6;
+  }
+}
+
+.control-bar {
+  padding: 16px;
+  display: flex;
+  gap: 10px;
+  background: rgba(0,0,0,0.4);
+}
+
 input {
-  flex: 1; background: rgba(0,0,0,0.5); border: 1px solid var(--border); border-radius: 10px;
-  padding: 14px 16px; color: #fff; outline: none; font-size: 16px; font-family: inherit; /* 16px prevents iOS auto-zoom */
+  flex: 1;
+  background: rgba(0,0,0,0.5);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  color: #fff;
+  outline: none;
+  font-size: 16px;
+  font-family: inherit;
   transition: all 0.2s ease;
 }
-input::placeholder { color: var(--dim); }
-input:focus { border-color: var(--accent); box-shadow: 0 0 15px var(--glow); background: rgba(0,0,0,0.7); }
+
+input::placeholder {
+  color: var(--dim);
+}
+
+input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 15px var(--glow);
+  background: rgba(0,0,0,0.7);
+}
 
 button {
-  background: var(--text); color: var(--bg); font-weight: 800; padding: 0 24px;
-  border-radius: 10px; border: none; cursor: pointer; text-transform: uppercase;
-  font-size: 12px; letter-spacing: 0.1em; transition: all 0.2s ease;
+  background: var(--text);
+  color: var(--bg);
+  font-weight: 800;
+  padding: 0 24px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  transition: all 0.2s ease;
 }
-button:hover { background: #fff; box-shadow: 0 0 15px rgba(255,255,255,0.3); transform: translateY(-1px); }
-button:active { transform: translateY(1px); opacity: 0.9; }
+
+button:hover {
+  background: #fff;
+  box-shadow: 0 0 15px rgba(255,255,255,0.3);
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: translateY(1px);
+  opacity: 0.9;
+}
 </style>
 </head>
+
 <body>
 
 <div class="bg-grid"></div>
 <div class="crt-overlay"></div>
 
 <div class="command-center" id="hubFrame">
+
   <div class="hud-header">
     <div class="hud-title">
       <div class="pulse-dot"></div>
       DG_CORE_MATRIX // <span id="hudTarget">ATLAS</span>
     </div>
-    <div style="font-size:10px; font-weight:800; color:var(--dim); letter-spacing: 0.1em;" id="networkStatus">● ONLINE</div>
+
+    <div
+      style="font-size:10px;font-weight:800;color:var(--dim);letter-spacing:0.1em;"
+      id="networkStatus"
+    >
+      ● ONLINE
+    </div>
   </div>
 
   <div class="agent-dock" id="dockDeck">
@@ -181,93 +414,155 @@ button:active { transform: translateY(1px); opacity: 0.9; }
   </div>
 
   <div class="terminal-stream" id="termStream">
-    <div class="msg-row sys-log">[SYS] Unified Matrix Interface initialized. Direct OpenRouter uplink established.</div>
-    <div class="msg-row sys-log">[SYS] Active Channel: ATLAS / Store Operations Manager.</div>
+
+    <div class="msg-row sys-log">
+      [SYS] Unified Matrix Interface initialized.
+      Direct OpenRouter uplink established.
+    </div>
+
+    <div class="msg-row sys-log">
+      [SYS] Active Channel: ATLAS / Store Operations Manager.
+    </div>
+
   </div>
 
   <div class="control-bar">
-    <input type="text" id="comInput" placeholder="Issue operational command..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+
+    <input
+      type="text"
+      id="comInput"
+      placeholder="Issue operational command..."
+      autocomplete="off"
+      autocorrect="off"
+      autocapitalize="off"
+      spellcheck="false"
+    >
+
     <button onclick="transmitSignal()">Send</button>
+
   </div>
+
 </div>
 
 <script>
 // ==========================================
-// CONFIGURATION & SECURITY
+// CONFIGURATION
 // ==========================================
-const OPENROUTER_API_KEY = "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";
-const API_URL = "https://openrouter.ai/api/v1/chat/completions";
-const MODEL = "openrouter/free"; // Routes to best available free model
+
+const OPENROUTER_API_KEY = "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";
+const API_URL =
+  "https://openrouter.ai/api/v1/chat/completions";
+
+const MODEL = "openrouter/free";
 
 // ==========================================
 // AGENT PROMPTS MATRIX
 // ==========================================
+
 const agents = [
+
   {
     name: "Atlas",
     tier: "Ops Tier",
     accent: "#ffb020",
-    prompt: "You are Atlas, the Store Operations AI for DreamyGainZ. Monitor and analyze store updates and provide operational guidance. Rules: Never invent product info, prices, inventory, supplier data, shipping paths, or customer info. If info is missing, say 'unknown'. Keep Shopify, CJdropshipping, and DSers separated. Format output matching an operational check manifest with Status, Product, What Changed, and Recommended Action."
+    prompt:
+      "You are Atlas, the Store Operations AI for DreamyGainZ. " +
+      "Monitor and analyze store updates and provide operational guidance. " +
+      "Rules: Never invent product info, prices, inventory, supplier data, " +
+      "shipping paths, or customer info. If info is missing, say 'unknown'. " +
+      "Keep Shopify, CJdropshipping, and DSers separated. " +
+      "Format output matching an operational check manifest with Status, " +
+      "Product, What Changed, and Recommended Action."
   },
+
   {
     name: "Pulse",
     tier: "Marketing Tier",
     accent: "#2fe0b6",
-    prompt: "You are Pulse, the Copywriting & Marketing AI for DreamyGainZ. Craft high-converting ad copy, viral video hooks, and automated email sequences."
+    prompt:
+      "You are Pulse, the Copywriting & Marketing AI for DreamyGainZ. " +
+      "Craft high-converting ad copy, viral video hooks, and automated email sequences."
   },
+
   {
     name: "Nova",
     tier: "Marketing Tier",
     accent: "#2fe0b6",
-    prompt: "You are Nova, the Ad Strategist AI for DreamyGainZ. Analyze ad spend metrics, calculate ROAS, and formulate targeting structures across TikTok and Facebook Ads."
+    prompt:
+      "You are Nova, the Ad Strategist AI for DreamyGainZ. " +
+      "Analyze ad spend metrics, calculate ROAS, and formulate targeting structures " +
+      "across TikTok and Facebook Ads."
   },
+
   {
     name: "Karen",
     tier: "Support Tier",
     accent: "#ff4a4a",
-    prompt: "You are Karen, the Customer Retention & Support Guardrail AI. Handle complaints, draft chargeback responses, and turn angry buyers into brand fans."
+    prompt:
+      "You are Karen, the Customer Retention & Support Guardrail AI. " +
+      "Handle complaints, draft chargeback responses, and turn angry buyers into brand fans."
   },
+
   {
     name: "Dash",
     tier: "Ops Tier",
     accent: "#ffb020",
-    prompt: "You are Dash, the Fulfillment & Logistics Optimization AI. Track delivery times, coordinate with private suppliers, and optimize shipping routes."
+    prompt:
+      "You are Dash, the Fulfillment & Logistics Optimization AI. " +
+      "Track delivery times, coordinate with private suppliers, and optimize shipping routes."
   },
+
   {
     name: "Ledger",
     tier: "Ops Tier",
     accent: "#ffb020",
-    prompt: "You are Ledger, the Business Finance & Profit Margin Tracker AI. Calculate net profit, breakdown cost of goods sold (COGS), and monitor payment processors."
+    prompt:
+      "You are Ledger, the Business Finance & Profit Margin Tracker AI. " +
+      "Calculate net profit, breakdown cost of goods sold (COGS), and monitor payment processors."
   },
+
   {
     name: "Vault",
     tier: "Intel Tier",
     accent: "#a855f7",
-    prompt: "You are Vault, the Product Research & Trend Scraping AI. Discover winning dropshipping products and evaluate consumer supply-demand shifts."
+    prompt:
+      "You are Vault, the Product Research & Trend Scraping AI. " +
+      "Discover winning dropshipping products and evaluate consumer supply-demand shifts."
   },
+
   {
     name: "Forge",
     tier: "Intel Tier",
     accent: "#a855f7",
-    prompt: "You are Forge, the Shopify Development & Conversion Rate Optimization (CRO) AI. Provide design optimization and app stack layouts."
+    prompt:
+      "You are Forge, the Shopify Development & Conversion Rate Optimization (CRO) AI. " +
+      "Provide design optimization and app stack layouts."
   },
+
   {
     name: "Henry",
     tier: "Intel Tier",
     accent: "#a855f7",
-    prompt: "You are Henry, the Brand Scaling & Wholesale Transition Strategist AI. Blueprint private labeling steps and wholesale supply contracts."
+    prompt:
+      "You are Henry, the Brand Scaling & Wholesale Transition Strategist AI. " +
+      "Blueprint private labeling steps and wholesale supply contracts."
   },
+
   {
     name: "Echo",
     tier: "Support Tier",
     accent: "#ff4a4a",
-    prompt: "You are Echo, the Brand Community & Social Media Engagement AI. Design organic TikTok concepts and comment reply scripts."
+    prompt:
+      "You are Echo, the Brand Community & Social Media Engagement AI. " +
+      "Design organic TikTok concepts and comment reply scripts."
   }
+
 ];
 
 // ==========================================
 // STATE MANAGEMENT
 // ==========================================
+
 let currentAgent = agents[0];
 let commandHistory = [];
 let historyIndex = -1;
@@ -275,160 +570,340 @@ let historyIndex = -1;
 // ==========================================
 // INITIALIZATION
 // ==========================================
-document.addEventListener('DOMContentLoaded', () => {
+
+document.addEventListener("DOMContentLoaded", () => {
+
   renderAgentDock();
   updateTheme(currentAgent);
-  
-  // Input event listeners
-  const input = document.getElementById('comInput');
-  input.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
+
+  const input = document.getElementById("comInput");
+
+  input.addEventListener("keydown", (e) => {
+
+    if (e.key === "Enter") {
       e.preventDefault();
       transmitSignal();
-    } else if (e.key === 'ArrowUp') {
+
+    } else if (e.key === "ArrowUp") {
+
       e.preventDefault();
+
       if (historyIndex < commandHistory.length - 1) {
         historyIndex++;
-        input.value = commandHistory[commandHistory.length - 1 - historyIndex];
+
+        input.value =
+          commandHistory[
+            commandHistory.length - 1 - historyIndex
+          ];
       }
-    } else if (e.key === 'ArrowDown') {
+
+    } else if (e.key === "ArrowDown") {
+
       e.preventDefault();
+
       if (historyIndex > 0) {
+
         historyIndex--;
-        input.value = commandHistory[commandHistory.length - 1 - historyIndex];
+
+        input.value =
+          commandHistory[
+            commandHistory.length - 1 - historyIndex
+          ];
+
       } else {
+
         historyIndex = -1;
-        input.value = '';
+        input.value = "";
+
       }
+
     }
+
   });
 
-  // Focus input on load
   input.focus();
+
 });
 
+// ==========================================
+// AGENT DOCK
+// ==========================================
+
 function renderAgentDock() {
-  const dock = document.getElementById('dockDeck');
+
+  const dock =
+    document.getElementById("dockDeck");
+
   dock.innerHTML = agents.map((agent, index) => `
-    <button class="agent-tab ${index === 0 ? 'active' : ''}" 
-            data-index="${index}" 
-            onclick="switchAgent(${index})">
+
+    <button
+      class="agent-tab ${index === 0 ? "active" : ""}"
+      data-index="${index}"
+      onclick="switchAgent(${index})"
+    >
       ${agent.name}
     </button>
-  `).join('');
+
+  `).join("");
+
 }
+
+// ==========================================
+// SWITCH AGENT
+// ==========================================
 
 function switchAgent(index) {
+
   currentAgent = agents[index];
+
   updateTheme(currentAgent);
-  
-  // Update active tab UI
-  document.querySelectorAll('.agent-tab').forEach((tab, i) => {
-    tab.classList.toggle('active', i === index);
-  });
-  
-  appendMessage('sys-log', `[SYS] Channel swapped. Uplink locked onto node: [${currentAgent.name.toUpperCase()}]`);
+
+  document
+    .querySelectorAll(".agent-tab")
+    .forEach((tab, i) => {
+
+      tab.classList.toggle(
+        "active",
+        i === index
+      );
+
+    });
+
+  appendMessage(
+    "sys-log",
+    `[SYS] Channel swapped. Uplink locked onto node: [${currentAgent.name.toUpperCase()}]`
+  );
+
 }
+
+// ==========================================
+// THEME
+// ==========================================
 
 function updateTheme(agent) {
-  const root = document.documentElement;
-  root.style.setProperty('--accent', agent.accent);
-  // Convert hex to rgba for glow (simple approximation)
-  root.style.setProperty('--glow', `${agent.accent}25`); 
-  document.getElementById('hudTarget').innerText = agent.name.toUpperCase();
+
+  const root =
+    document.documentElement;
+
+  root.style.setProperty(
+    "--accent",
+    agent.accent
+  );
+
+  root.style.setProperty(
+    "--glow",
+    `${agent.accent}25`
+  );
+
+  document.getElementById("hudTarget").innerText =
+    agent.name.toUpperCase();
+
 }
 
-function appendMessage(className, content, isHTML = false) {
-  const stream = document.getElementById('termStream');
-  const div = document.createElement('div');
-  div.className = `msg-row ${className}`;
-  if (isHTML) div.innerHTML = content;
-  else div.textContent = content;
+// ==========================================
+// MESSAGE RENDERER
+// ==========================================
+
+function appendMessage(
+  className,
+  content,
+  isHTML = false
+) {
+
+  const stream =
+    document.getElementById("termStream");
+
+  const div =
+    document.createElement("div");
+
+  div.className =
+    `msg-row ${className}`;
+
+  if (isHTML) {
+    div.innerHTML = content;
+  } else {
+    div.textContent = content;
+  }
+
   stream.appendChild(div);
-  stream.scrollTop = stream.scrollHeight;
+
+  stream.scrollTop =
+    stream.scrollHeight;
+
   return div;
 }
 
 // ==========================================
 // CORE TRANSMISSION ENGINE
 // ==========================================
+
 async function transmitSignal() {
-  const input = document.getElementById('comInput');
-  const payload = input.value.trim();
+
+  const input =
+    document.getElementById("comInput");
+
+  const payload =
+    input.value.trim();
+
   if (!payload) return;
 
-  // Save to history
   commandHistory.push(payload);
   historyIndex = -1;
   input.value = "";
 
-  // Render user message (sanitized)
-  const safePayload = payload.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  appendMessage('user-log', `
-    <div class="msg-header" style="color:var(--accent)">[DEV_UPLINK] ➡️ ${currentAgent.name.toUpperCase()}</div>
-    ${safePayload}
-  `, true);
+  const safePayload =
+    payload
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
 
-  // Render Matrix Feed Active loader
-  const loaderDiv = appendMessage('sys-log', '', true);
-  loaderDiv.className = 'msg-row decrypt-loader';
-  loaderDiv.innerHTML = '<span>MATRIX FEED ACTIVE</span>';
+  appendMessage(
+    "user-log",
+    `
+      <div class="msg-header"
+           style="color:var(--accent)">
+        [DEV_UPLINK] ➡️ ${currentAgent.name.toUpperCase()}
+      </div>
+      ${safePayload}
+    `,
+    true
+  );
+
+  const loaderDiv =
+    appendMessage(
+      "sys-log",
+      "",
+      true
+    );
+
+  loaderDiv.className =
+    "msg-row decrypt-loader";
+
+  loaderDiv.innerHTML =
+    "<span>MATRIX FEED ACTIVE</span>";
 
   try {
-    const response = await fetch(API_URL, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
-        'Content-Type': 'application/json',
-        'HTTP-Referer': window.location.href,
-        'X-Title': 'DreamyGainZ Core Matrix'
-      },
-      body: JSON.stringify({
-        model: MODEL,
-        messages: [
-          { role: "system", content: currentAgent.prompt },
-          { role: "user", content: payload }
-        ]
-      })
-    });
+
+    const response =
+      await fetch(
+        API_URL,
+        {
+          method: "POST",
+
+          headers: {
+            "Authorization":
+              `Bearer ${OPENROUTER_API_KEY}`,
+
+            "Content-Type":
+              "application/json",
+
+            "HTTP-Referer":
+              window.location.href,
+
+            "X-Title":
+              "DreamyGainZ Core Matrix"
+          },
+
+          body: JSON.stringify({
+
+            model: MODEL,
+
+            messages: [
+
+              {
+                role: "system",
+                content: currentAgent.prompt
+              },
+
+              {
+                role: "user",
+                content: payload
+              }
+
+            ]
+
+          })
+
+        }
+      );
 
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.error?.message || `HTTP ${response.status}`);
+
+      const errorData =
+        await response
+          .json()
+          .catch(() => ({}));
+
+      throw new Error(
+        errorData?.error?.message ||
+        `HTTP ${response.status}`
+      );
+
     }
 
-    const data = await response.json();
-    
-    // Safely parse OpenRouter response structure
-    const aiResponse = data?.choices?.[0]?.message?.content;
-    
+    const data =
+      await response.json();
+
+    const aiResponse =
+      data?.choices?.[0]?.message?.content;
+
     if (!aiResponse) {
-      throw new Error("Empty response payload from neural net.");
+
+      throw new Error(
+        "Empty response payload from neural net."
+      );
+
     }
 
-    // Remove loader
     loaderDiv.remove();
 
-    // Parse markdown and render
-    const computedMarkdown = marked.parse(aiResponse);
-    appendMessage('agent-log', `
-      <div class="msg-header" style="color:var(--accent)">[${currentAgent.name.toUpperCase()}_RESPONSE]</div>
-      ${computedMarkdown}
-    `, true);
+    const computedMarkdown =
+      marked.parse(aiResponse);
+
+    appendMessage(
+      "agent-log",
+      `
+        <div class="msg-header"
+             style="color:var(--accent)">
+          [${currentAgent.name.toUpperCase()}_RESPONSE]
+        </div>
+
+        ${computedMarkdown}
+      `,
+      true
+    );
 
   } catch (error) {
+
     loaderDiv.remove();
-    appendMessage('sys-log', `[CRITICAL] Network parity link failure: ${error.message}`, false);
-    
-    // Visual error cue
-    const errorLog = document.querySelector('.msg-row:last-child');
+
+    appendMessage(
+      "sys-log",
+      `[CRITICAL] Network parity link failure: ${error.message}`,
+      false
+    );
+
+    const errorLog =
+      document.querySelector(
+        ".msg-row:last-child"
+      );
+
     if (errorLog) {
-      errorLog.style.color = '#ef4444';
-      errorLog.style.borderLeft = '2px solid #ef4444';
-      errorLog.style.paddingLeft = '10px';
+
+      errorLog.style.color =
+        "#ef4444";
+
+      errorLog.style.borderLeft =
+        "2px solid #ef4444";
+
+      errorLog.style.paddingLeft =
+        "10px";
+
     }
+
   }
+
 }
 </script>
+
 </body>
 </html>
